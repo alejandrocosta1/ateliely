@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ateliê Ely — Vitrine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2B2A28; --ink-soft:#6b655e;
+    --bg:#FBF7F0; --bg-card:#FFFFFF; --border:#E7DFD2;
+    --sage:#4F6F52; --sage-ink:#F3F6F1;
+    --rose:#C06E5A; --mustard:#D9A441;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root{
+      --ink:#F2EEE6; --ink-soft:#B9B2A6;
+      --bg:#211E1A; --bg-card:#2B2622; --border:#423C34;
+      --sage:#7FA480; --sage-ink:#1D2A1E;
+      --rose:#DB9683; --mustard:#E5BD66;
+      color-scheme: dark;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Work Sans', system-ui, sans-serif;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:calc(96px + env(safe-area-inset-bottom,0px));
+  }
+  h1,.brand{font-family:'Fraunces', Georgia, serif;}
+  header{padding:28px 20px 16px; max-width:720px; margin:0 auto;}
+  .brand{font-size:28px; font-weight:600; margin:0 0 4px;}
+  .tagline{color:var(--ink-soft); font-size:14px; margin:0 0 18px; max-width:40ch;}
+  nav.tabs{display:flex; gap:8px; max-width:720px; margin:0 auto; padding:0 20px 8px; flex-wrap:wrap;}
+  .tab{flex:1; min-width:100px; text-align:center; padding:10px 6px; border-radius:10px; border:1px solid var(--border); background:var(--bg-card); font-size:13px; font-weight:500; cursor:pointer; color:var(--ink-soft);}
+  .tab[aria-selected="true"]{background:var(--sage); color:var(--sage-ink); border-color:var(--sage); font-weight:600;}
+  main{max-width:720px; margin:0 auto; padding:16px 20px 20px;}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:420px){ .grid{grid-template-columns:1fr;} }
+  .empty{color:var(--ink-soft); font-size:14px; padding:30px 4px; text-align:center;}
+  .card{background:var(--bg-card); border:1px solid var(--border); border-radius:14px; overflow:hidden; display:flex; flex-direction:column;}
+  .swatch{aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; font-family:'Fraunces', serif; font-size:14px; font-weight:500; text-align:center; color:var(--sage-ink); padding:10px;}
+  .swatch img{width:100%; height:100%; object-fit:cover; display:block;}
+  .card-body{padding:12px 14px 14px; display:flex; flex-direction:column; gap:6px; flex:1;}
+  .card-name{font-weight:600; font-size:14.5px; line-height:1.3;}
+  .card-meta{font-size:12.5px; color:var(--ink-soft);}
+  .card-footer{margin-top:auto; display:flex; align-items:center; justify-content:space-between; padding-top:6px;}
+  .price{font-weight:600; font-size:15px;}
+  .badge-out{display:inline-block; font-size:11px; font-weight:600; color:var(--rose); border:1px solid var(--rose); border-radius:999px; padding:2px 8px; width:fit-content;}
+  .add-btn{border:none; background:var(--sage); color:var(--sage-ink); font-weight:600; font-size:13px; padding:7px 14px; border-radius:999px; cursor:pointer;}
+  .add-btn:disabled{background:var(--border); color:var(--ink-soft); cursor:not-allowed;}
+  .stepper{display:flex; align-items:center; gap:10px;}
+  .stepper button{width:26px; height:26px; border-radius:999px; border:1px solid var(--border); background:var(--bg-card); color:var(--ink); font-size:15px; cursor:pointer;}
+  .stepper span{font-weight:600; min-width:14px; text-align:center;}
+  footer.note{max-width:720px; margin:18px auto 0; padding:0 20px; color:var(--ink-soft); font-size:12.5px; line-height:1.5;}
+  .cartbar{position:fixed; left:0; right:0; bottom:0; z-index:10; padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px)); background:var(--bg-card); border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:12px; transform:translateY(110%); transition:transform .25s ease;}
+  .cartbar.show{transform:translateY(0);}
+  .cartbar .info{font-size:13.5px; line-height:1.35;}
+  .cartbar .info strong{font-size:15px;}
+  .cartbar button{border:none; background:var(--rose); color:#fff; font-weight:600; font-size:14px; padding:11px 18px; border-radius:999px; cursor:pointer; white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<header>
+  <p class="brand">Ateliê Ely</p>
+  <p class="tagline">Roupas e acessórios. Escolha as peças e finalize o pedido direto no WhatsApp.</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <div class="tab" role="tab" aria-selected="true" data-cat="roupas">Roupas</div>
+  <div class="tab" role="tab" aria-selected="false" data-cat="acessorios">Acessórios</div>
+  <div class="tab" role="tab" aria-selected="false" data-cat="acessorios_masc">Acess. Masculino</div>
+</nav>
+
+<main><div class="grid" id="grid"></div></main>
+
+<footer class="note">Peças marcadas como esgotadas não podem ser adicionadas ao pedido.</footer>
+
+<div class="cartbar" id="cartbar">
+  <div class="info"><strong id="cartCount">0 peças</strong><br>Total: <span id="cartTotal">R$ 0,00</span></div>
+  <button id="checkoutBtn">Pedir no WhatsApp</button>
+</div>
+
+<script>
+/* =====================================================================
+   COMO EDITAR O CATÁLOGO (sem precisar programar):
+   1. No GitHub, abra este arquivo (index.html) e clique no lápis "Edit".
+   2. Ache a lista "products" logo abaixo.
+   3. Para adicionar uma peça, copie uma linha inteira (entre { } ) e cole
+      embaixo, trocando nome, meta, price, category e available.
+   4. category pode ser: "roupas", "acessorios" ou "acessorios_masc".
+   5. available: true (disponível) ou false (esgotado).
+   6. Pra foto: hospede a imagem em algum lugar (ex: imgur.com) e cole o
+      link dela em "photo". Deixe "" se ainda não tiver foto.
+   7. Role até o fim e clique "Commit changes" (ou "Salvar alterações").
+      Em 1-2 minutos o site atualiza sozinho.
+   ===================================================================== */
+
+const WHATSAPP_NUMBER = "5585999999999"; // <-- troque pelo número real, só dígitos (DDI+DDD+número)
+
+const products = [
+  {name:"Body liso manga curta", meta:"RN · Branco", price:34.90, category:"roupas", available:true, photo:""},
+  {name:"Body manga longa", meta:"P · Azul claro", price:38.90, category:"roupas", available:true, photo:""},
+  {name:"Laço de tecido", meta:"Único · Terracota", price:12.00, category:"acessorios", available:true, photo:""},
+  {name:"Boné aba reta", meta:"Único · Preto", price:45.00, category:"acessorios_masc", available:true, photo:""},
+];
+
+/* ===================== Não precisa editar daqui pra baixo ===================== */
+const BRL = v => v.toLocaleString("pt-BR", {style:"currency", currency:"BRL"});
+products.forEach((p,i) => p.id = "p"+i);
+
+let activeCat = "roupas";
+const cart = {};
+const grid = document.getElementById("grid");
+const tabs = document.querySelectorAll(".tab");
+const cartbar = document.getElementById("cartbar");
+
+function swatchBg(p){
+  const palette = ["var(--sage)","var(--rose)","var(--mustard)"];
+  return palette[(p.name||"x").charCodeAt(0) % palette.length];
+}
+
+function render(){
+  const list = products.filter(p => p.category === activeCat);
+  grid.innerHTML = "";
+  if (!list.length){ grid.innerHTML = `<div class="empty">Nenhuma peça cadastrada nesta categoria ainda.</div>`; return; }
+  list.forEach(p => {
+    const qty = cart[p.id] || 0;
+    const card = document.createElement("div");
+    card.className = "card";
+    const swatchInner = p.photo ? `<img src="${p.photo}" alt="">` : p.name;
+    card.innerHTML = `
+      <div class="swatch" style="background:${swatchBg(p)}">${p.photo ? "" : swatchInner}${p.photo ? `<img src="${p.photo}" alt="">` : ""}</div>
+      <div class="card-body">
+        <div class="card-name">${p.name}</div>
+        <div class="card-meta">${p.meta}</div>
+        ${!p.available ? '<span class="badge-out">Esgotado</span>' : ""}
+        <div class="card-footer">
+          <span class="price">${BRL(p.price)}</span>
+          <div class="qty-area"></div>
+        </div>
+      </div>`;
+    const area = card.querySelector(".qty-area");
+    renderQtyArea(area, p, qty);
+    grid.appendChild(card);
+  });
+}
+
+function renderQtyArea(area, p, qty){
+  if (!p.available){ area.innerHTML = `<button class="add-btn" disabled>Indisponível</button>`; return; }
+  if (qty === 0){
+    area.innerHTML = `<button class="add-btn">Adicionar</button>`;
+    area.querySelector("button").onclick = () => { cart[p.id]=1; render(); updateCartBar(); };
+  } else {
+    area.innerHTML = `<div class="stepper"><button data-act="dec">−</button><span>${qty}</span><button data-act="inc">+</button></div>`;
+    area.querySelector('[data-act="inc"]').onclick = () => { cart[p.id]++; render(); updateCartBar(); };
+    area.querySelector('[data-act="dec"]').onclick = () => { cart[p.id]--; if(cart[p.id]<=0) delete cart[p.id]; render(); updateCartBar(); };
+  }
+}
+
+function updateCartBar(){
+  const ids = Object.keys(cart);
+  const totalQty = ids.reduce((s,id)=>s+cart[id],0);
+  const totalVal = ids.reduce((s,id)=>s+cart[id]*products.find(p=>p.id===id).price,0);
+  document.getElementById("cartCount").textContent = `${totalQty} peça${totalQty===1?"":"s"}`;
+  document.getElementById("cartTotal").textContent = BRL(totalVal);
+  cartbar.classList.toggle("show", totalQty>0);
+}
+
+document.getElementById("checkoutBtn").onclick = () => {
+  const ids = Object.keys(cart);
+  if (!ids.length) return;
+  let lines = ["Olá! Quero fazer um pedido:"], total = 0;
+  ids.forEach(id => {
+    const p = products.find(x=>x.id===id); const qty = cart[id]; const sub = qty*p.price; total += sub;
+    lines.push(`• ${qty}x ${p.name} (${p.meta}) — ${BRL(sub)}`);
+  });
+  lines.push(`Total: ${BRL(total)}`);
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank");
+};
+
+tabs.forEach(t => t.onclick = () => {
+  tabs.forEach(x => x.setAttribute("aria-selected","false"));
+  t.setAttribute("aria-selected","true");
+  activeCat = t.dataset.cat;
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
